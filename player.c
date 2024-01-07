@@ -94,14 +94,3 @@ void player_move(Ship* player)
 
 	player->pos = Vector2Add(player->pos, acceleration);
 }
-
-// TODO: Create main function calls. Like player_draw_game(Ship player),
-// to draw everything from the player, or player_draw_ui(Ship player),
-// to draw UI components with player info.
-// Possible implementations:
-// - player_update
-// 	Update from the player (Position, fuel, hp etc).
-// - player_draw_game
-// 	Draw all of the player components for the game.
-// - player_draw_ui
-// 	Draw all UI based on player info.
