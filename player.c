@@ -48,7 +48,7 @@ void player_update(Ship* player)
 	player_move(player);
 }
 
-// Extern functions implementation
+// Inner functions implementation
 
 void player_display_fuel(Ship player)
 {
