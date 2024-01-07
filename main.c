@@ -36,7 +36,8 @@ int main(void)
 	Vector2 ball_pos = CLITERAL(Vector2){ .x = 42.f, .y = 42.f };
 
 	while (!WindowShouldClose()) {
-		player_move(&player);
+		player_update(&player);
+
 		if (IsKeyPressed(KEY_R)) {
 			hr_reset_all();
 		}
@@ -44,10 +45,10 @@ int main(void)
 		BeginDrawing();
 		ClearBackground(BLACK);
 
-		player_draw(&player);
+		player_draw_game(player);
 		DrawCircleV(ball_pos, 42, RED);
 
-		player_display_fuel(player);
+		player_draw_ui(player);
 		draw_middle_line();
 
 		EndDrawing();
