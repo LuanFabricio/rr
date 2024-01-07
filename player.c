@@ -11,6 +11,11 @@
 
 #define MAX_FUEL 100000;
 
+// Inner functions declarations
+void player_display_fuel(Ship player);
+void player_move(Ship* player);
+
+// Extern functions implementation
 void player_start(Ship *player)
 {
 	player->size = CLITERAL(Vector2){42.f, 42.f};
@@ -21,22 +26,50 @@ void player_start(Ship *player)
 	player->fuel = MAX_FUEL;
 }
 
-void player_draw(const Ship *player)
+void player_draw_game(const Ship player)
 {
 	Vector2 half_size = CLITERAL(Vector2) {
-		.x = player->size.x / 2.f,
-		.y = player->size.y / 2.f,
+		.x = player.size.x / 2.f,
+		.y = player.size.y / 2.f,
 	};
-	Vector2 player_pos = project_game_to_screen(player->pos);
+	Vector2 player_pos = project_game_to_screen(player.pos);
 
-	DrawRectangleV(Vector2Subtract(player_pos, half_size), player->size, PLAYER_COLOR);
+	DrawRectangleV(Vector2Subtract(player_pos, half_size), player.size, PLAYER_COLOR);
 }
 
-void player_display_fuel(Ship player);
+void player_draw_ui(Ship player)
+{
+	player_display_fuel(player);
+}
+
+void player_update(Ship* player)
+{
+	player->fuel -= 0.5f;
+	player_move(player);
+}
+
+// Extern functions implementation
+
+void player_display_fuel(Ship player)
+{
+	const size_t BUFFER_SIZE = 255;
+	const size_t FONT_SIZE = 32;
+
+	char* fuel_text = (char*)malloc(sizeof(char) * BUFFER_SIZE);
+	snprintf(fuel_text, BUFFER_SIZE, "Fuel remaning: %.2f", player.fuel);
+
+	int width = MeasureText(fuel_text, FONT_SIZE);
+	int pos_x = (GetScreenWidth() - width) >> 1;
+	int pos_y = FONT_SIZE;
+
+
+	DrawText(fuel_text, pos_x, pos_y, FONT_SIZE, RAYWHITE);
+
+	free(fuel_text);
+}
 
 void player_move(Ship* player)
 {
-	player->fuel -= 0.5f;
 	Vector2 acceleration = Vector2Zero();
 
 	if (IsKeyDown(KEY_W)) {
@@ -60,24 +93,6 @@ void player_move(Ship* player)
 	acceleration = Vector2Scale(acceleration, speed);
 
 	player->pos = Vector2Add(player->pos, acceleration);
-}
-
-void player_display_fuel(Ship player)
-{
-	const size_t BUFFER_SIZE = 255;
-	const size_t FONT_SIZE = 32;
-
-	char* fuel_text = (char*)malloc(sizeof(char) * BUFFER_SIZE);
-	snprintf(fuel_text, BUFFER_SIZE, "Fuel remaning: %.2f", player.fuel);
-
-	int width = MeasureText(fuel_text, FONT_SIZE);
-	int pos_x = (GetScreenWidth() - width) >> 1;
-	int pos_y = FONT_SIZE;
-
-
-	DrawText(fuel_text, pos_x, pos_y, FONT_SIZE, RAYWHITE);
-
-	free(fuel_text);
 }
 
 // TODO: Create main function calls. Like player_draw_game(Ship player),
