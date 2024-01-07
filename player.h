@@ -40,9 +40,6 @@ CREATE_FUNCTION_PTR(player_draw_ui, (Ship), void);
 
 #undef CREATE_FUNCTION_PTR
 
-typedef void (*player_display_fuel_t)(Ship);
-RR_PLAYER player_display_fuel_t player_display_fuel = NULL;
-
 RR_PLAYER void reset_player_function()
 {
 
@@ -54,7 +51,6 @@ RR_PLAYER void reset_player_function()
 	player_draw_game = (player_draw_game_t)hr_reset_function(player_shared_ptr, "player_draw_game");
 	player_update = (player_update_t)hr_reset_function(player_shared_ptr, "player_update");
 	player_draw_ui = (player_draw_ui_t)hr_reset_function(player_shared_ptr, "player_draw_ui");
-	player_display_fuel = (player_display_fuel_t)hr_reset_function(player_shared_ptr, "player_display_fuel");
 }
 
 #endif // PLAYER_IMPLEMENTATION
