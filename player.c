@@ -41,6 +41,8 @@ void player_draw_game(const Ship player)
 void player_draw_ui(Ship player)
 {
 	_player_display_fuel(player);
+
+	DrawFPS(15, 15);
 }
 
 void player_update(Ship* player)
@@ -81,14 +83,14 @@ void _player_display_fuel(Ship player)
 		.y = GAME_MIN_Y + 5.f,
 	};
 
-	printf("start.x = %.02f\nstart.y = %.02f\n", start.x, start.y);
-
 	Vector2 end = {
 		.x  = cosf(fuel_radians),
 		.y  = -sinf(fuel_radians),
 	};
+
 	end = Vector2Scale(end, 3.f);
 	end = Vector2Add(end, start);
+
 
 	DrawLineEx(project_game_to_screen(start), project_game_to_screen(end), 3.5f, RAYWHITE);
 }
@@ -113,9 +115,8 @@ void _player_move(Ship* player)
 		acceleration.x += 1;
 	}
 
-	const float speed = 0.005f;
-	acceleration = Vector2Normalize(acceleration);
-	acceleration = Vector2Scale(acceleration, speed);
+	const float speed = 15.f;
+	acceleration = Vector2Scale(Vector2Normalize(acceleration), speed * GetFrameTime());
 
 	player->pos = Vector2Add(player->pos, acceleration);
 }
