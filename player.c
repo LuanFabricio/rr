@@ -22,24 +22,15 @@ void player_start(Ship *player)
 	player->size = CLITERAL(Vector2){ 42.f, 42.f };
 
 	const Vector2 screen_center = screen_center_point();
-	player->pos.x = screen_center.x;
-	player->pos.y = screen_center.y;
+	player->pos.x = screen_center.x - player->size.x / 2.f;
+	player->pos.y = screen_center.y - player->size.y / 2.f;
 
 	player->fuel = MAX_FUEL;
 }
 
 void player_draw_game(const Ship player)
 {
-	// Vector2 half_size = CLITERAL(Vector2) {
-	// 	.x = player.size.x / 2.f,
-	// 	.y = player.size.y / 2.f,
-	// };
-	Vector2 player_pos = player.pos; //project_game_to_screen(player.pos);
-
-	// printf("player_pos: { %.02f, %.02f }\n", player_pos.x, player_pos.y);
-	// printf("player_size: { %.02f, %.02f }\n", player_size.x, player_size.y);
-
-	DrawRectangleV(player_pos, player.size, PLAYER_COLOR);
+	DrawRectangleV(player.pos, player.size, PLAYER_COLOR);
 }
 
 void player_draw_ui(Ship player)
@@ -85,7 +76,7 @@ void _player_display_fuel(Ship player)
 	const Vector2 center = screen_center_point();
 	Vector2 start = {
 		.x = center.x,
-		.y = 35.f,
+		.y = 125.f,
 	};
 
 	Vector2 end = {
@@ -93,7 +84,8 @@ void _player_display_fuel(Ship player)
 		.y  = -sinf(fuel_radians),
 	};
 
-	end = Vector2Scale(end, 20.f);
+	const float mag = 75.f;
+	end = Vector2Scale(end, mag);
 	end = Vector2Add(end, start);
 
 	DrawLineEx(start, end, 3.5f, RAYWHITE);
@@ -119,8 +111,12 @@ void _player_move(Ship* player)
 		acceleration.x += 1;
 	}
 
-	const float speed = 150.f;
+	const float speed = 300.f;
 	acceleration = Vector2Scale(Vector2Normalize(acceleration), speed * GetFrameTime());
 
 	player->pos = Vector2Add(player->pos, acceleration);
+
+	const Vector2 min_pos = CLITERAL(Vector2){ 0.f, 0.f };
+	const Vector2 max_pos = CLITERAL(Vector2){ GAME_WIDTH - player->size.x, GAME_HEIGHT - player->size.y };
+	player->pos = Vector2Clamp(player->pos, min_pos, max_pos);
 }
