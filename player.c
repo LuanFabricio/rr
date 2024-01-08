@@ -67,14 +67,14 @@ void _player_display_fuel(Ship player)
 
 	int width = MeasureText(fuel_text, FONT_SIZE);
 	int pos_x = (GetScreenWidth() - width) >> 1;
-	int pos_y = FONT_SIZE;
+	int pos_y = FONT_SIZE >> 1;
 
 	DrawText(fuel_text, pos_x, pos_y, FONT_SIZE, RAYWHITE);
 
 	free(fuel_text);
 
 	// Final implementation
-	float fuel = Normalize(player.fuel, 0, MAX_FUEL) * -PI - PI;
+	float fuel_radians = Normalize(player.fuel, 0, MAX_FUEL) * -PI - PI;
 
 	Vector2 start = {
 		.x = (GAME_MAX_X + GAME_MIN_X) / 2.f,
@@ -84,8 +84,8 @@ void _player_display_fuel(Ship player)
 	printf("start.x = %.02f\nstart.y = %.02f\n", start.x, start.y);
 
 	Vector2 end = {
-		.x  = cosf(fuel),
-		.y  = -sinf(fuel),
+		.x  = cosf(fuel_radians),
+		.y  = -sinf(fuel_radians),
 	};
 	end = Vector2Scale(end, 3.f);
 	end = Vector2Add(end, start);
