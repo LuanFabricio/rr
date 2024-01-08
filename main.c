@@ -6,11 +6,9 @@
 #include "utils.h"
 #include "player.h"
 
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 720
+#define SCREEN_WIDTH GAME_WIDTH
+#define SCREEN_HEIGHT GAME_HEIGHT
 #define TITLE_NAME "River raider"
-
-#define PLAYER_COLOR BLUE
 
 void draw_middle_line()
 {
