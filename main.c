@@ -3,6 +3,7 @@
 #include "raylib.h"
 #include "raymath.h"
 
+#include "utils.h"
 #include "player.h"
 
 #define SCREEN_WIDTH 1280
@@ -13,11 +14,11 @@
 
 void draw_middle_line()
 {
-	int half_width = GetScreenWidth() >> 1;
-	int half_height = GetScreenHeight() >> 1;
+	int half_width = GAME_WIDTH >> 1;
+	int half_height = GAME_HEIGHT >> 1;
 
-	DrawLine(half_width, 0, half_width, GetScreenHeight(), RAYWHITE);
-	DrawLine(0, half_height, GetScreenWidth(), half_height, RAYWHITE);
+	DrawLine(half_width, 0, half_width, GAME_HEIGHT, RAYWHITE);
+	DrawLine(0, half_height, GAME_WIDTH, half_height, RAYWHITE);
 }
 
 int main(void)
@@ -31,6 +32,8 @@ int main(void)
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE_NAME);
 
+	RenderTexture2D screen = LoadRenderTexture(GAME_WIDTH, GAME_HEIGHT);
+
 	player_start(&player);
 	Vector2 ball_velocity = CLITERAL(Vector2){ .x = 0.05f, .y = 0.05f };
 	Vector2 ball_pos = CLITERAL(Vector2){ .x = 42.f, .y = 42.f };
@@ -42,7 +45,8 @@ int main(void)
 			hr_reset_all();
 		}
 
-		BeginDrawing();
+		BeginTextureMode(screen);
+
 		ClearBackground(BLACK);
 
 		player_draw_game(player);
@@ -51,19 +55,33 @@ int main(void)
 		player_draw_ui(player);
 		draw_middle_line();
 
+		EndTextureMode();
+
+		BeginDrawing();
+
+		DrawTexturePro(
+			screen.texture,
+			CLITERAL(Rectangle){ .x = 0, .y = 0, .width = screen.texture.width, .height = -screen.texture.height },
+			CLITERAL(Rectangle){ .x = 0, .y = 0, .width = GetScreenWidth(), .height = GetScreenHeight() },
+			CLITERAL(Vector2){ 0, 0 },
+			0,
+			WHITE
+		);
+
 		EndDrawing();
 
 		ball_pos = Vector2Add(ball_pos, ball_velocity);
 
-		if (ball_pos.x < 42 || ball_pos.x >= GetScreenWidth() - 42) {
+		if (ball_pos.x < 42 || ball_pos.x >= GAME_WIDTH - 42) {
 			ball_velocity.x = -ball_velocity.x;
 		}
 
-		if (ball_pos.y < 42 || ball_pos.y >= GetScreenHeight() - 42) {
+		if (ball_pos.y < 42 || ball_pos.y >= GAME_HEIGHT - 42) {
 			ball_velocity.y = -ball_velocity.y;
 		}
 	}
 
+	UnloadRenderTexture(screen);
 	hr_end();
 
 	return 0;
