@@ -19,11 +19,12 @@ void* hr_reset_function(void* shared_ptr, const char* function_name);
 #endif // __HOTRELOAD_H
 
 #ifdef __HOTRELOAD_IMPLEMENTATION
-#include <stdarg.h>
-
+#ifndef __HOTRELOAD_FUNCTIONS
+#define __HOTRELOAD_FUNCTIONS
 static size_t reset_functions_len;
 static reset_func_t* reset_functions;
 
+#include <stdarg.h>
 void hr_init(size_t len, const reset_func_t *functions)
 {
 	reset_functions_len = len;
@@ -79,4 +80,5 @@ void* hr_reset_function(void* shared_ptr, const char* function_name)
 	return function_ptr;
 }
 
+#endif // __HOTRELOAD_FUNCTIONS
 #endif // __HOTRELOAD_IMPLEMENTATION

@@ -5,8 +5,11 @@ CFLAGS="-Wall -Wextra"
 CLINKS="-lm -lraylib"
 
 set -xe
-$CC $CFLAGS -fPIC -shared -o build/objs/player.so player.c $CLINKS &
 
-if [[ $1 != "debug" ]]; then
-	$CC $CFLAGS -o build/main main.c $CLINKS
+if [[ $1 == "release" ]]; then
+	$CC $CFLAGS -c -o build/objs/player.o src/player.c $CLINKS
+	$CC $CFLAGS -o build/main main.c build/objs/player.o $CLINKS
+else
+	$CC $CFLAGS -fPIC -shared -o build/objs/player.so src/player.c $CLINKS &
+	$CC $CFLAGS -o build/main main.c $CLINKS -D DEBUG
 fi
