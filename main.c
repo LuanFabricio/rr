@@ -61,7 +61,7 @@ int main(void)
 	fuel_destroy(&container, 100);
 
 	while (!WindowShouldClose()) {
-		player_update(&player, &container);
+		player_update(&player, &container, fuel_destroy);
 
 #ifdef DEBUG
 		if (IsKeyPressed(KEY_R)) {
