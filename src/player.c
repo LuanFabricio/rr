@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "fuel.h"
 #include "raylib.h"
 #include "raymath.h"
 
-#define PLAYER_IMPLEMENTATION
-#include "player.h"
 #define UTILS_IMPLEMENTATION
 #include "utils.h"
+#define PLAYER_IMPLEMENTATION
+#include "player.h"
+#include "fuel.h"
 
 #define PLAYER_COLOR BLUE
 #define MAX_FUEL 50000
@@ -15,7 +15,7 @@
 // Inner functions declarations
 void _player_display_fuel(Ship player);
 void _player_move(Ship* player);
-void _player_check_fuel_collision(Ship* player, Fuel_Container *container);
+void _player_check_fuel_collision(Ship* player, Fuel_Container *container,  void (*fuel_destroy) (Fuel_Container*, size_t));
 
 // Extern functions implementation
 
@@ -42,7 +42,7 @@ void player_draw_ui(Ship player)
 	DrawFPS(15, 15);
 }
 
-void player_update(Ship* player, Fuel_Container* container)
+void player_update(Ship* player, Fuel_Container* container, void (*fuel_destroy) (Fuel_Container*, size_t))
 {
 	if (player->fuel > 0) {
 		player->fuel -= 0.5f;
@@ -51,7 +51,7 @@ void player_update(Ship* player, Fuel_Container* container)
 	}
 
 	_player_move(player);
-	_player_check_fuel_collision(player, container);
+	_player_check_fuel_collision(player, container, fuel_destroy);
 }
 
 // Inner functions implementation
@@ -124,4 +124,28 @@ void _player_move(Ship* player)
 	player->pos = Vector2Clamp(player->pos, min_pos, max_pos);
 }
 
-void _player_check_fuel_collision(Ship* player, Fuel_Container *container);
+void _player_check_fuel_collision(Ship* player, Fuel_Container *container, void (*fuel_destroy) (Fuel_Container*, size_t))
+{
+	const Rectangle player_rec = {
+		.x = player->pos.x,
+		.y = player->pos.y,
+		.width = player->size.x,
+		.height = player->size.y,
+	};
+
+	Rectangle fuel_rec = {
+		.x = 0, .y = 0,
+		.width = fuel_size.x,
+		.height = fuel_size.y,
+	};
+
+	for (size_t i = 0; i < container->size; i++) {
+		fuel_rec.x = container->fuel[i].pos.x;
+		fuel_rec.y = container->fuel[i].pos.y;
+		if (CheckCollisionRecs(player_rec, fuel_rec)) {
+			player->fuel += container->fuel[i].content;
+			player->fuel = Clamp(player->fuel, 0, MAX_FUEL);
+			fuel_destroy(container, i);
+		}
+	}
+}

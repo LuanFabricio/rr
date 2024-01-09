@@ -27,7 +27,7 @@ RR_PLAYER void* player_shared_ptr = NULL;
 
 CREATE_FUNCTION_PTR(RR_PLAYER, player_start, (Ship*), void);
 CREATE_FUNCTION_PTR(RR_PLAYER, player_draw_game, (Ship), void);
-CREATE_FUNCTION_PTR(RR_PLAYER, player_update, (Ship*, Fuel_Container*), void);
+CREATE_FUNCTION_PTR(RR_PLAYER, player_update, (Ship*, Fuel_Container*, void (*fuel_destroy) (Fuel_Container*, size_t)), void);
 CREATE_FUNCTION_PTR(RR_PLAYER, player_draw_ui, (Ship), void);
 
 RR_PLAYER void reset_player_function()
@@ -46,7 +46,7 @@ RR_PLAYER void reset_player_function()
 #else
 
 void player_start(Ship *player);
-void player_update(Ship* player, Fuel_Container* container);
+void player_update(Ship* player, Fuel_Container* container, void (*fuel_destroy) (Fuel_Container*, size_t));
 void player_draw_game(const Ship player);
 void player_draw_ui(const Ship player);
 
