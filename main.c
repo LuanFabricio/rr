@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "raylib.h"
 #include "raymath.h"
+#include "src/fuel.h"
 
 #ifdef DEBUG
 #define __HOTRELOAD_IMPLEMENTATION
@@ -30,6 +31,7 @@ int main(void)
 #ifdef DEBUG
 	const reset_func_t reset_functions[] = {
 		&reset_player_function,
+		&reset_fuel_function,
 	};
 	hr_init(CALC_SIZEOF(reset_functions), reset_functions);
 	hr_reset_all();
@@ -46,8 +48,20 @@ int main(void)
 	Vector2 ball_velocity = CLITERAL(Vector2){ .x = 0.05f, .y = 0.05f };
 	Vector2 ball_pos = CLITERAL(Vector2){ .x = 42.f, .y = 42.f };
 
+	Fuel_Container container = {0};
+	container.size = 0;
+
+	fuel_spawn(&container);
+	fuel_spawn(&container);
+	fuel_spawn(&container);
+	fuel_spawn(&container);
+
+	fuel_destroy(&container, 1);
+	fuel_destroy(&container, 0);
+	fuel_destroy(&container, 100);
+
 	while (!WindowShouldClose()) {
-		player_update(&player);
+		player_update(&player, &container);
 
 #ifdef DEBUG
 		if (IsKeyPressed(KEY_R)) {
@@ -59,6 +73,7 @@ int main(void)
 
 		ClearBackground(BLACK);
 
+		fuel_draw(&container);
 		player_draw_game(player);
 		DrawCircleV(ball_pos, 42, RED);
 

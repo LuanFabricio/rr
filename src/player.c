@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "fuel.h"
 #include "raylib.h"
 #include "raymath.h"
 
@@ -14,6 +15,7 @@
 // Inner functions declarations
 void _player_display_fuel(Ship player);
 void _player_move(Ship* player);
+void _player_check_fuel_collision(Ship* player, Fuel_Container *container);
 
 // Extern functions implementation
 
@@ -40,7 +42,7 @@ void player_draw_ui(Ship player)
 	DrawFPS(15, 15);
 }
 
-void player_update(Ship* player)
+void player_update(Ship* player, Fuel_Container* container)
 {
 	if (player->fuel > 0) {
 		player->fuel -= 0.5f;
@@ -49,6 +51,7 @@ void player_update(Ship* player)
 	}
 
 	_player_move(player);
+	_player_check_fuel_collision(player, container);
 }
 
 // Inner functions implementation
@@ -120,3 +123,5 @@ void _player_move(Ship* player)
 	const Vector2 max_pos = CLITERAL(Vector2){ GAME_WIDTH - player->size.x, GAME_HEIGHT - player->size.y };
 	player->pos = Vector2Clamp(player->pos, min_pos, max_pos);
 }
+
+void _player_check_fuel_collision(Ship* player, Fuel_Container *container);
