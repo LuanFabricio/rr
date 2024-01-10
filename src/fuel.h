@@ -3,23 +3,12 @@
 
 #include <stdlib.h>
 #include "raylib.h"
+#include "types.h"
 
-typedef struct {
-	Vector2 pos;
-	float content;
-} Fuel;
-
-#define CONTAINER_CAPACITY 255
-
-typedef struct {
-	Fuel fuel[CONTAINER_CAPACITY];
-	size_t size;
-} Fuel_Container;
-
-static const Vector2 fuel_size = {
-	.x = 28.f,
-	.y = 42.f,
-};
+#include "utils.h"
+CREATE_FUNCTION_TYPE(fuel_spawn, (Fuel_Container *), void);
+CREATE_FUNCTION_TYPE(fuel_draw, (Fuel_Container *), void);
+CREATE_FUNCTION_TYPE(fuel_destroy, (Fuel_Container*, size_t), void);
 
 #ifndef DEBUG
 
@@ -33,13 +22,12 @@ void fuel_draw(const Fuel_Container* container);
 
 #define __HOTRELOAD_IMPLEMENTATION
 #include "../hotreload.h"
-#include "utils.h"
 
 #define RR_FUEL static
 
-CREATE_FUNCTION_PTR(RR_FUEL, fuel_spawn, (Fuel_Container *), void);
-CREATE_FUNCTION_PTR(RR_FUEL, fuel_draw, (Fuel_Container *), void);
-CREATE_FUNCTION_PTR(RR_FUEL, fuel_destroy, (Fuel_Container*, size_t), void);
+CREATE_FUNCTION_PTR(RR_FUEL, fuel_spawn);
+CREATE_FUNCTION_PTR(RR_FUEL, fuel_draw);
+CREATE_FUNCTION_PTR(RR_FUEL, fuel_destroy);
 
 static void *fuel_shared_ptr = NULL;
 RR_FUEL void reset_fuel_function()

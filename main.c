@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "raylib.h"
 #include "raymath.h"
+#include "src/collision.h"
 #include "src/fuel.h"
 
 #ifdef DEBUG
@@ -32,6 +33,7 @@ int main(void)
 	const reset_func_t reset_functions[] = {
 		&reset_player_function,
 		&reset_fuel_function,
+		&reset_collision_function,
 	};
 	hr_init(CALC_SIZEOF(reset_functions), reset_functions);
 	hr_reset_all();
@@ -106,6 +108,8 @@ int main(void)
 		if (ball_pos.y < 42 || ball_pos.y >= GAME_HEIGHT - 42) {
 			ball_velocity.y = -ball_velocity.y;
 		}
+
+		collision_check_player(&player, &container);
 	}
 
 	UnloadRenderTexture(screen);

@@ -7,13 +7,17 @@
 
 // #include "utils.h"
 
+CREATE_FUNCTION_TYPE(player_start, (Ship*), void);
+CREATE_FUNCTION_TYPE(player_draw_game, (Ship), void);
+CREATE_FUNCTION_TYPE(player_update, (Ship*, Fuel_Container*, void (*fuel_destroy) (Fuel_Container*, size_t)), void);
+CREATE_FUNCTION_TYPE(player_draw_ui, (Ship), void);
+
 typedef struct {
-	Vector2 pos, size;
-	float fuel;
-} Ship;
-
-
-#endif // __PLAYER_H
+	player_start_t player_start;
+	player_draw_game_t player_draw_game;
+	player_update_t player_update;
+	player_draw_ui_t player_draw_ui;
+} Player_Functions;
 
 #ifndef PLAYER_IMPLEMENTATION
 #define PLAYER_IMPLEMENTATION
@@ -25,10 +29,10 @@ typedef struct {
 #define RR_PLAYER static
 RR_PLAYER void* player_shared_ptr = NULL;
 
-CREATE_FUNCTION_PTR(RR_PLAYER, player_start, (Ship*), void);
-CREATE_FUNCTION_PTR(RR_PLAYER, player_draw_game, (Ship), void);
-CREATE_FUNCTION_PTR(RR_PLAYER, player_update, (Ship*, Fuel_Container*, void (*fuel_destroy) (Fuel_Container*, size_t)), void);
-CREATE_FUNCTION_PTR(RR_PLAYER, player_draw_ui, (Ship), void);
+CREATE_FUNCTION_PTR(RR_PLAYER, player_start);
+CREATE_FUNCTION_PTR(RR_PLAYER, player_draw_game);
+CREATE_FUNCTION_PTR(RR_PLAYER, player_update);
+CREATE_FUNCTION_PTR(RR_PLAYER, player_draw_ui);
 
 RR_PLAYER void reset_player_function()
 {
@@ -51,3 +55,5 @@ void player_draw_game(const Ship player);
 void player_draw_ui(const Ship player);
 
 #endif // PLAYER_IMPLEMENTATION
+
+#endif // __PLAYER_H
