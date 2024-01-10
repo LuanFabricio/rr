@@ -41,7 +41,7 @@ void player_draw_ui(Ship player)
 	DrawFPS(15, 15);
 }
 
-void player_update(Ship* player, Fuel_Container* container, void (*fuel_destroy) (Fuel_Container*, size_t))
+void player_update(Ship* player)
 {
 	if (player->fuel > 0) {
 		player->fuel -= 0.5f;

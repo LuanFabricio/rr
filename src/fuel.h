@@ -5,16 +5,17 @@
 #include "raylib.h"
 #include "types.h"
 
-#include "utils.h"
-CREATE_FUNCTION_TYPE(fuel_spawn, (Fuel_Container *), void);
-CREATE_FUNCTION_TYPE(fuel_draw, (Fuel_Container *), void);
-CREATE_FUNCTION_TYPE(fuel_destroy, (Fuel_Container*, size_t), void);
-
 #ifndef DEBUG
 
 void fuel_spawn(Fuel_Container *container);
 void fuel_destroy(Fuel_Container *container, size_t index);
 void fuel_draw(const Fuel_Container* container);
+
+static Fuel_Functions fuel_functions = {
+	.spawn = fuel_spawn,
+	.draw = fuel_draw,
+	.destroy = fuel_destroy,
+};
 
 #else
 #ifndef __FUEL_IMPLEMENTATION
@@ -25,9 +26,11 @@ void fuel_draw(const Fuel_Container* container);
 
 #define RR_FUEL static
 
-CREATE_FUNCTION_PTR(RR_FUEL, fuel_spawn);
-CREATE_FUNCTION_PTR(RR_FUEL, fuel_draw);
-CREATE_FUNCTION_PTR(RR_FUEL, fuel_destroy);
+static Fuel_Functions fuel_functions = {
+	.spawn = NULL,
+	.draw = NULL,
+	.destroy = NULL,
+};
 
 static void *fuel_shared_ptr = NULL;
 RR_FUEL void reset_fuel_function()
@@ -36,9 +39,9 @@ RR_FUEL void reset_fuel_function()
 
 	fuel_shared_ptr = hr_reset_file(file_path, fuel_shared_ptr);
 
-	fuel_spawn = (fuel_spawn_t)hr_reset_function(fuel_shared_ptr, "fuel_spawn");
-	fuel_draw = (fuel_draw_t)hr_reset_function(fuel_shared_ptr, "fuel_draw");
-	fuel_destroy = (fuel_destroy_t)hr_reset_function(fuel_shared_ptr, "fuel_destroy");
+	fuel_functions.spawn = (fuel_spawn_t)hr_reset_function(fuel_shared_ptr, "fuel_spawn");
+	fuel_functions.draw = (fuel_draw_t)hr_reset_function(fuel_shared_ptr, "fuel_draw");
+	fuel_functions.destroy = (fuel_destroy_t)hr_reset_function(fuel_shared_ptr, "fuel_destroy");
 }
 
 #endif // __FUEL_IMPLEMENTATION

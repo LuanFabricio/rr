@@ -10,8 +10,9 @@
 #include "../hotreload.h"
 #include "utils.h"
 
-CREATE_FUNCTION_TYPE(collision_check_player, (Ship *player, Fuel_Container *container), void);
-CREATE_FUNCTION_PTR(RR_COLLISION, collision_check_player);
+static Collision_Functions collision_functions = {
+	.check_player = NULL,
+};
 
 void *collision_shared_ptr = NULL;
 
@@ -19,10 +20,16 @@ void reset_collision_function()
 {
 	const char* file_path =  "build/objs/collision.so";
 	collision_shared_ptr = hr_reset_file(file_path, collision_shared_ptr);
-	collision_check_player = (collision_check_player_t)hr_reset_function(collision_shared_ptr, "collision_check_player");
+
+	collision_functions.check_player = (collision_check_player_t)hr_reset_function(collision_shared_ptr, "collision_check_player");
 }
 #else
 void collision_check_player(Ship *player, Fuel_Container *container);
+
+static Collision_Functions collision_functions = {
+	.check_player = collision_check_player,
+};
+
 #endif // DEBUG
 
 #endif // __COLLISION_H

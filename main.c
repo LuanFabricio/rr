@@ -46,24 +46,24 @@ int main(void)
 
 	RenderTexture2D screen = LoadRenderTexture(GAME_WIDTH, GAME_HEIGHT);
 
-	player_start(&player);
+	player_functions.start(&player);
 	Vector2 ball_velocity = CLITERAL(Vector2){ .x = 0.05f, .y = 0.05f };
 	Vector2 ball_pos = CLITERAL(Vector2){ .x = 42.f, .y = 42.f };
 
 	Fuel_Container container = {0};
 	container.size = 0;
 
-	fuel_spawn(&container);
-	fuel_spawn(&container);
-	fuel_spawn(&container);
-	fuel_spawn(&container);
+	fuel_functions.spawn(&container);
+	fuel_functions.spawn(&container);
+	fuel_functions.spawn(&container);
+	fuel_functions.spawn(&container);
 
-	fuel_destroy(&container, 1);
-	fuel_destroy(&container, 0);
-	fuel_destroy(&container, 100);
+	fuel_functions.destroy(&container, 1);
+	fuel_functions.destroy(&container, 0);
+	fuel_functions.destroy(&container, 100);
 
 	while (!WindowShouldClose()) {
-		player_update(&player, &container, fuel_destroy);
+		player_functions.update(&player);
 
 #ifdef DEBUG
 		if (IsKeyPressed(KEY_R)) {
@@ -75,11 +75,11 @@ int main(void)
 
 		ClearBackground(BLACK);
 
-		fuel_draw(&container);
-		player_draw_game(player);
+		fuel_functions.draw(&container);
+		player_functions.draw_game(player);
 		DrawCircleV(ball_pos, 42, RED);
 
-		player_draw_ui(player);
+		player_functions.draw_ui(player);
 		draw_middle_line();
 
 		EndTextureMode();
@@ -109,7 +109,7 @@ int main(void)
 			ball_velocity.y = -ball_velocity.y;
 		}
 
-		collision_check_player(&player, &container);
+		collision_functions.check_player(&player, &container, &fuel_functions);
 	}
 
 	UnloadRenderTexture(screen);

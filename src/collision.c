@@ -3,7 +3,7 @@
 #include "types.h"
 #include "constants.h"
 
-void collision_check_player(Ship *player, Fuel_Container *container)
+void collision_check_player(Ship *player, Fuel_Container *container, const Fuel_Functions *fuel_func)
 {
 	const Rectangle player_rec = {
 		.x = player->pos.x,
@@ -23,7 +23,7 @@ void collision_check_player(Ship *player, Fuel_Container *container)
 		other_rec.y = container->fuel[i].pos.y;
 
 		if (CheckCollisionRecs(player_rec, other_rec)) {
-
+			fuel_func->destroy(container, i);
 		}
 	}
 }
