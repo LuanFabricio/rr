@@ -46,10 +46,10 @@ void player_draw_game(const Ship player);
 void player_draw_ui(const Ship player);
 
 static Player_Functions player_functions = {
-	.player_start = player_start,
-	.player_draw_game = player_draw_game,
-	.player_update = player_update,
-	.player_draw_ui = player_draw_ui,
+	.start = player_start,
+	.draw_game = player_draw_game,
+	.update = player_update,
+	.draw_ui = player_draw_ui,
 };
 
 #endif // PLAYER_IMPLEMENTATION
