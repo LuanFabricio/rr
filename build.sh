@@ -10,7 +10,7 @@ CLINKS="-lm -lraylib"
 set -xe
 
 if [[ $1 == "release" ]]; then
-	$CC $CFLAGS -c -o build/objs/game.o src/player.c  $CLINKS
+	$CC $CFLAGS -c -o build/objs/player.o src/player.c  $CLINKS
 	$CC $CFLAGS -c -o build/objs/fuel.o src/fuel.c $CLINKS
 	$CC $CFLAGS -c -o build/objs/collision.o src/collision.c $CLINKS
 
