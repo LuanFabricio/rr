@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include "raylib.h"
 #include "raymath.h"
 #include "src/collision.h"
@@ -14,8 +16,8 @@
 
 #include "./src/utils.h"
 
-#define SCREEN_WIDTH GAME_WIDTH
-#define SCREEN_HEIGHT GAME_HEIGHT
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 720
 #define TITLE_NAME "River raider"
 
 void draw_middle_line()
@@ -43,16 +45,18 @@ int main(void)
 
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE_NAME);
+	SetTargetFPS(120);
 
 	RenderTexture2D screen = LoadRenderTexture(GAME_WIDTH, GAME_HEIGHT);
 
 	player_functions.start(&player);
-	Vector2 ball_velocity = CLITERAL(Vector2){ .x = 0.05f, .y = 0.05f };
+	Vector2 ball_velocity = CLITERAL(Vector2){ .x = 250.f, .y = 250.f };
 	Vector2 ball_pos = CLITERAL(Vector2){ .x = 42.f, .y = 42.f };
 
 	Fuel_Container container = {0};
 	container.size = 0;
 
+	srand(time(NULL));
 	fuel_functions.spawn(&container);
 	fuel_functions.spawn(&container);
 	fuel_functions.spawn(&container);
@@ -97,9 +101,7 @@ int main(void)
 
 		EndDrawing();
 
-		printf("player.pos = { %.02f, %.02f }\n", player.pos.x, player.pos.y);
-
-		ball_pos = Vector2Add(ball_pos, ball_velocity);
+		ball_pos = Vector2Add(ball_pos, Vector2Scale(ball_velocity, GetFrameTime()));
 
 		if (ball_pos.x < 42 || ball_pos.x >= GAME_WIDTH - 42) {
 			ball_velocity.x = -ball_velocity.x;
