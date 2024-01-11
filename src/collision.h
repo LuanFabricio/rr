@@ -24,7 +24,7 @@ void reset_collision_function()
 	collision_functions.check_player = (collision_check_player_t)hr_reset_function(collision_shared_ptr, "collision_check_player");
 }
 #else
-void collision_check_player(Ship *player, Fuel_Container *container);
+void collision_check_player(Ship *player, Fuel_Container *container, const Fuel_Functions *fuel_func);
 
 static Collision_Functions collision_functions = {
 	.check_player = collision_check_player,
