@@ -14,8 +14,6 @@
 #endif // DEBUG
 #include "./src/player.h"
 
-#include "./src/utils.h"
-
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 #define TITLE_NAME "River raider"
