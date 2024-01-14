@@ -2,8 +2,10 @@
 #define __TYPES_H
 
 #include <stdlib.h>
+#include <stdbool.h>
 #include "raylib.h"
 #include "utils.h"
+#include "constants.h"
 
 // ======================================= FUEL =======================================
 
@@ -34,6 +36,7 @@ typedef struct {
 typedef struct {
 	Vector2 pos, size;
 	float fuel;
+	bool alive;
 } Ship;
 
 CREATE_FUNCTION_TYPE(player_start, (Ship*), void);
@@ -48,12 +51,35 @@ typedef struct {
 	player_draw_ui_t draw_ui;
 } Player_Functions;
 
-// ======================================= COLLISION =======================================
-
-CREATE_FUNCTION_TYPE(collision_check_player, (Ship *player, Fuel_Container *container, const Fuel_Functions *fuel_func), void);
+// ======================================= ENEMY =======================================
 
 typedef struct {
-	collision_check_player_t check_player;
+	Ship data[ENEMIES_CAPACITY];
+	size_t size;
+} Enemies;
+
+CREATE_FUNCTION_TYPE(enemy_draw, (const Ship*), void);
+CREATE_FUNCTION_TYPE(enemy_draw_arr, (const Enemies*), void);
+CREATE_FUNCTION_TYPE(enemy_spawn, (Enemies*, Ship), void);
+CREATE_FUNCTION_TYPE(enemy_spawn_random, (Enemies*), void);
+CREATE_FUNCTION_TYPE(enemy_destroy, (Enemies*, size_t), void);
+
+typedef struct {
+	enemy_draw_t draw;
+	enemy_draw_arr_t draw_arr;
+	enemy_spawn_t spawn;
+	enemy_spawn_random_t spawn_random;
+	enemy_destroy_t destroy;
+} Enemy_Functions;
+
+// ======================================= COLLISION =======================================
+
+CREATE_FUNCTION_TYPE(collision_check_player_fuel, (Ship *player, Fuel_Container *container, const Fuel_Functions *fuel_func), void);
+CREATE_FUNCTION_TYPE(collision_check_player_enemies, (Ship *player, Enemies *enemies, const Enemy_Functions *enemy_func), void);
+
+typedef struct {
+	collision_check_player_fuel_t check_player_fuel;
+	collision_check_player_enemies_t check_player_enemies;
 } Collision_Functions;
 
 #endif // __TYPES_H
