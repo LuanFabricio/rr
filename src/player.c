@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "raylib.h"
@@ -10,7 +11,9 @@
 #include "constants.h"
 
 #define PLAYER_COLOR BLUE
-#define MAX_FUEL 50000
+#define MAX_FUEL 5000
+#define PLAYER_FUEL_DECAY 0.25f
+#define FUEL_INDICATOR_MAGNITUDE 105.f
 
 // Inner functions declarations
 void _player_display_fuel(Ship player);
@@ -27,6 +30,7 @@ void player_start(Ship *player)
 	player->pos.y = screen_center.y - player->size.y / 2.f;
 
 	player->fuel = MAX_FUEL;
+	player->alive = true;
 }
 
 void player_draw_game(const Ship player)
@@ -44,7 +48,7 @@ void player_draw_ui(Ship player)
 void player_update(Ship* player)
 {
 	if (player->fuel > 0) {
-		player->fuel -= 0.5f;
+		player->fuel -= PLAYER_FUEL_DECAY;
 	} else {
 		player->fuel = 0;
 	}
@@ -85,8 +89,7 @@ void _player_display_fuel(Ship player)
 		.y  = -sinf(fuel_radians),
 	};
 
-	const float mag = 75.f;
-	end = Vector2Scale(end, mag);
+	end = Vector2Scale(end, FUEL_INDICATOR_MAGNITUDE);
 	end = Vector2Add(end, start);
 
 	DrawLineEx(start, end, 3.5f, RAYWHITE);
