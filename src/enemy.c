@@ -11,6 +11,8 @@
 
 #define ENEMY_COLOR CLITERAL(Color){ 255, 0, 255, 255 }
 
+#define MIN_Y_SPAWN -420.f
+
 void enemy_spawn(Enemies *enemies, Ship new_enemy)
 {
 	assert(enemies->size < ENEMIES_CAPACITY);
@@ -30,6 +32,7 @@ void enemy_spawn_random(Enemies *enemies)
 		.pos = random_game_point(),
 		.size = enemy_size,
 	};
+	enemy.pos.y = -enemy.size.y + random_float() * MIN_Y_SPAWN;
 
 	enemy_spawn(enemies, enemy);
 }
@@ -41,6 +44,18 @@ void enemy_destroy(Enemies* enemies, size_t enemy_index)
 
 	enemies->size -= 1;
 	enemies->data[enemy_index] = enemies->data[enemies->size];
+}
+
+void enemy_update(Enemies *enemies)
+{
+	for (size_t i =  0; i < enemies->size; i++) {
+		enemies->data[i].pos.y += 1.5f;
+
+		if (enemies->data[i].pos.y >= GAME_HEIGHT) {
+			enemy_destroy(enemies, i);
+			i--;
+		}
+	}
 }
 
 void enemy_draw(const Ship * enemy)
