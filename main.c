@@ -5,6 +5,8 @@
 #include "raymath.h"
 #include "src/collision.h"
 #include "src/fuel.h"
+#include "src/enemy.h"
+#include "src/types.h"
 
 #ifdef DEBUG
 #define __HOTRELOAD_IMPLEMENTATION
@@ -34,6 +36,7 @@ int main(void)
 		&reset_player_function,
 		&reset_fuel_function,
 		&reset_collision_function,
+		&reset_enemy_function,
 	};
 	hr_init(CALC_SIZEOF(reset_functions), reset_functions);
 	hr_reset_all();
@@ -43,7 +46,8 @@ int main(void)
 
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE_NAME);
-	SetTargetFPS(120);
+	SetTargetFPS(75);
+	srand(time(NULL));
 
 	RenderTexture2D screen = LoadRenderTexture(GAME_WIDTH, GAME_HEIGHT);
 
@@ -54,7 +58,11 @@ int main(void)
 	Fuel_Container container = {0};
 	container.size = 0;
 
-	srand(time(NULL));
+	enemy_functions.spawn_random(&enemies);
+	enemy_functions.spawn_random(&enemies);
+	enemy_functions.spawn_random(&enemies);
+	enemy_functions.spawn_random(&enemies);
+
 	fuel_functions.spawn(&container);
 	fuel_functions.spawn(&container);
 	fuel_functions.spawn(&container);
@@ -66,6 +74,10 @@ int main(void)
 
 	while (!WindowShouldClose()) {
 		player_functions.update(&player);
+
+		if (IsKeyPressed(KEY_T)) {
+			enemy_functions.destroy(&enemies, enemies.size-1);
+		}
 
 #ifdef DEBUG
 		if (IsKeyPressed(KEY_R)) {
@@ -79,6 +91,7 @@ int main(void)
 
 		fuel_functions.draw(&container);
 		player_functions.draw_game(player);
+		enemy_functions.draw_arr(&enemies);
 		DrawCircleV(ball_pos, 42, RED);
 
 		player_functions.draw_ui(player);
@@ -109,7 +122,8 @@ int main(void)
 			ball_velocity.y = -ball_velocity.y;
 		}
 
-		collision_functions.check_player(&player, &container, &fuel_functions);
+		collision_functions.check_player_fuel(&player, &container, &fuel_functions);
+		collision_functions.check_player_enemies(&player, &enemies, &enemy_functions);
 	}
 
 	UnloadRenderTexture(screen);
