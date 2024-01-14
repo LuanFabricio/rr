@@ -31,6 +31,7 @@ void collision_check_player_fuel(Ship *player, Fuel_Container *container, const 
 
 void collision_check_player_enemies(Ship *player, Enemies *enemies, const Enemy_Functions *enemy_func)
 {
+	(void)enemy_func;
 	const Rectangle player_rec = {
 		.x = player->pos.x,
 		.y = player->pos.y,

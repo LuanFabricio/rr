@@ -76,7 +76,10 @@ int main(void)
 		player_functions.update(&player);
 
 		if (IsKeyPressed(KEY_T)) {
-			enemy_functions.destroy(&enemies, enemies.size-1);
+			enemy_functions.spawn_random(&enemies);
+			enemy_functions.spawn_random(&enemies);
+			enemy_functions.spawn_random(&enemies);
+			enemy_functions.spawn_random(&enemies);
 		}
 
 #ifdef DEBUG
@@ -124,6 +127,8 @@ int main(void)
 
 		collision_functions.check_player_fuel(&player, &container, &fuel_functions);
 		collision_functions.check_player_enemies(&player, &enemies, &enemy_functions);
+
+		enemy_functions.update(&enemies);
 	}
 
 	UnloadRenderTexture(screen);
