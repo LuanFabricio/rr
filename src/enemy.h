@@ -30,6 +30,7 @@ void reset_enemy_function()
 	enemy_functions.spawn = (enemy_spawn_t)hr_reset_function(enemy_shared_ptr, "enemy_spawn");
 	enemy_functions.spawn_random = (enemy_spawn_random_t)hr_reset_function(enemy_shared_ptr, "enemy_spawn_random");
 	enemy_functions.destroy = (enemy_destroy_t)hr_reset_function(enemy_shared_ptr, "enemy_destroy");
+	enemy_functions.update = (enemy_update_t)hr_reset_function(enemy_shared_ptr, "enemy_update");
 }
 
 #else
@@ -39,6 +40,7 @@ void enemy_draw_arr(const Enemies* enemies);
 void enemy_spawn_random(Enemies* enemies);
 void enemy_spawn(Enemies* enemies, Ship new_enemy);
 void enemy_destroy(Enemies* enemies, size_t enemy_index);
+void enemy_update(Enemies *enemies);
 
 static Enemy_Functions enemy_functions = {
 	.draw = enemy_draw,
@@ -46,6 +48,7 @@ static Enemy_Functions enemy_functions = {
 	.spawn = enemy_spawn,
 	.spawn_random = enemy_spawn_random,
 	.destroy = enemy_destroy,
+	.update = enemy_update,
 };
 
 #endif // DEBUG

@@ -63,6 +63,7 @@ CREATE_FUNCTION_TYPE(enemy_draw_arr, (const Enemies*), void);
 CREATE_FUNCTION_TYPE(enemy_spawn, (Enemies*, Ship), void);
 CREATE_FUNCTION_TYPE(enemy_spawn_random, (Enemies*), void);
 CREATE_FUNCTION_TYPE(enemy_destroy, (Enemies*, size_t), void);
+CREATE_FUNCTION_TYPE(enemy_update, (Enemies*), void);
 
 typedef struct {
 	enemy_draw_t draw;
@@ -70,6 +71,7 @@ typedef struct {
 	enemy_spawn_t spawn;
 	enemy_spawn_random_t spawn_random;
 	enemy_destroy_t destroy;
+	enemy_update_t update;
 } Enemy_Functions;
 
 // ======================================= COLLISION =======================================
