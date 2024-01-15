@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <assert.h>
 #include "raylib.h"
-#include "constants.h"
+#include "../constants.h"
 
 #define UTILS_IMPLEMENTATION
 #define RANDOM_UTILS
-#include "utils.h"
+#include "../utils.h"
 
-#include "types.h"
+#include "../types.h"
 
 #define ENEMY_COLOR CLITERAL(Color){ 255, 0, 255, 255 }
 

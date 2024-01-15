@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 #include "raylib.h"
-#include "types.h"
+#include "../types.h"
 
 #ifndef DEBUG
 
@@ -22,7 +22,7 @@ static Fuel_Functions fuel_functions = {
 #define __FUEL_IMPLEMENTATION
 
 #define __HOTRELOAD_IMPLEMENTATION
-#include "../hotreload.h"
+#include "../../hotreload.h"
 
 #define RR_FUEL static
 

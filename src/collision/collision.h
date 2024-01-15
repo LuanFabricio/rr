@@ -1,13 +1,13 @@
 #ifndef __COLLISION_H
 #define __COLLISION_H
 
-#include "types.h"
+#include "../types.h"
 
 #define RR_COLLISION static
 
 #ifdef DEBUG
 #define __HOTRELOAD_IMPLEMENTATION
-#include "../hotreload.h"
+#include "../../hotreload.h"
 #include "utils.h"
 
 static Collision_Functions collision_functions = {

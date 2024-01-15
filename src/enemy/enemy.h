@@ -2,15 +2,15 @@
 #define __ENEMY_H
 
 #include <stdlib.h>
-#include "types.h"
+#include "../types.h"
 
 static Enemies enemies = { .size = 0 };
 
 #ifdef DEBUG
 #define __HOTRELOAD_IMPLEMENTATION
-#include "../hotreload.h"
+#include "../../hotreload.h"
 
-#include "utils.h"
+#include "../utils.h"
 
 static Enemy_Functions enemy_functions = {
 	.draw = NULL,

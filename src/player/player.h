@@ -3,8 +3,8 @@
 
 #include <stdbool.h>
 #include "raylib.h"
-#include "fuel.h"
-#include "types.h"
+#include "../fuel/fuel.h"
+#include "../types.h"
 
 // #include "utils.h"
 
@@ -12,8 +12,8 @@
 #define PLAYER_IMPLEMENTATION
 
 #define __HOTRELOAD_IMPLEMENTATION
-#include "../hotreload.h"
-#include "utils.h"
+#include "../../hotreload.h"
+#include "../utils.h"
 
 #define RR_PLAYER static
 RR_PLAYER void* player_shared_ptr = NULL;

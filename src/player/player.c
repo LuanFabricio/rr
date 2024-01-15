@@ -6,9 +6,9 @@
 
 #define UTILS_IMPLEMENTATION
 #define SCREEN_UTILS
-#include "utils.h"
-#include "types.h"
-#include "constants.h"
+#include "../utils.h"
+#include "../types.h"
+#include "../constants.h"
 
 #define PLAYER_COLOR BLUE
 #define MAX_FUEL 5000

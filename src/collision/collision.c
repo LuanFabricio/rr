@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include "raylib.h"
 
-#include "types.h"
-#include "constants.h"
+#include "../types.h"
+#include "../constants.h"
 
 void collision_check_player_fuel(Ship *player, Fuel_Container *container, const Fuel_Functions *fuel_func)
 {

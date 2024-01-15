@@ -1,10 +1,10 @@
 #include <raylib.h>
 
-#include "constants.h"
+#include "../constants.h"
 #define UTILS_IMPLEMENTATION
 #define RANDOM_UTILS
-#include "utils.h"
-#include "types.h"
+#include "../utils.h"
+#include "../types.h"
 
 #define MIN_SPAWN_FUEL 15.f
 #define MAX_SPAWN_FUEL 3500.f
