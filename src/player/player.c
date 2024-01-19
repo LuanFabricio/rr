@@ -18,24 +18,29 @@
 // Inner functions declarations
 void _player_display_fuel(Ship player);
 void _player_move(Ship* player);
+Texture2D _player_load_texture();
 
 // Extern functions implementation
 
 void player_start(Ship *player)
 {
-	player->size = CLITERAL(Vector2){ 42.f, 42.f };
+
+	player->fuel = MAX_FUEL;
+	player->alive = true;
+
+	player->texture = _player_load_texture();
+	player->size.x = player->texture.width;
+	player->size.y = player->texture.height;
 
 	const Vector2 screen_center = screen_center_point();
 	player->pos.x = screen_center.x - player->size.x / 2.f;
 	player->pos.y = screen_center.y - player->size.y / 2.f;
-
-	player->fuel = MAX_FUEL;
-	player->alive = true;
 }
 
 void player_draw_game(const Ship player)
 {
-	DrawRectangleV(player.pos, player.size, PLAYER_COLOR);
+	DrawTextureV(player.texture, player.pos, RAYWHITE);
+	// DrawRectangleV(player.pos, player.size, PLAYER_COLOR);
 }
 
 void player_draw_ui(Ship player)
@@ -123,4 +128,14 @@ void _player_move(Ship* player)
 	const Vector2 min_pos = CLITERAL(Vector2){ 0.f, 0.f };
 	const Vector2 max_pos = CLITERAL(Vector2){ GAME_WIDTH - player->size.x, GAME_HEIGHT - player->size.y };
 	player->pos = Vector2Clamp(player->pos, min_pos, max_pos);
+}
+
+Texture2D _player_load_texture()
+{
+	Image img = LoadImage("./assets/ship/ship.png");
+	ImageResizeNN(&img, 64, 64);
+	Texture2D tex = LoadTextureFromImage(img);
+	UnloadImage(img);
+
+	return tex;
 }
