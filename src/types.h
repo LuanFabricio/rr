@@ -21,11 +21,13 @@ typedef struct {
 	size_t size;
 } Fuel_Container;
 
+CREATE_FUNCTION_TYPE(fuel_load_texture, (void), void);
 CREATE_FUNCTION_TYPE(fuel_spawn, (Fuel_Container *), void);
 CREATE_FUNCTION_TYPE(fuel_draw, (const Fuel_Container *), void);
 CREATE_FUNCTION_TYPE(fuel_destroy, (Fuel_Container*, size_t), void);
 
 typedef struct {
+	fuel_load_texture_t load_texture;
 	fuel_spawn_t spawn;
 	fuel_draw_t draw;
 	fuel_destroy_t destroy;
@@ -37,6 +39,7 @@ typedef struct {
 	Vector2 pos, size;
 	float fuel;
 	bool alive;
+	Texture2D texture;
 } Ship;
 
 CREATE_FUNCTION_TYPE(player_start, (Ship*), void);

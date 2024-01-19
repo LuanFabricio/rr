@@ -8,7 +8,17 @@
 
 #define MIN_SPAWN_FUEL 15.f
 #define MAX_SPAWN_FUEL 3500.f
-#define FUEL_COLOR RED
+#define FUEL_COLOR RAYWHITE
+
+Texture2D fuel_texture = {0};
+
+void fuel_load_texture()
+{
+	Image tex = LoadImage("./assets/fuel/fuel.png");
+	ImageResizeNN(&tex, tex.width * 2, tex.height * 2);
+	fuel_texture = LoadTextureFromImage(tex);
+	UnloadImage(tex);
+}
 
 void fuel_spawn(Fuel_Container *container)
 {
@@ -30,7 +40,8 @@ void fuel_spawn(Fuel_Container *container)
 void fuel_draw(const Fuel_Container *container)
 {
 	for (size_t i = 0; i < container->size; i++) {
-		DrawRectangleV(container->fuel[i].pos, fuel_size, FUEL_COLOR);
+		DrawTextureV(fuel_texture, container->fuel[i].pos, FUEL_COLOR);
+		// DrawRectangleV(container->fuel[i].pos, fuel_size, FUEL_COLOR);
 	}
 }
 

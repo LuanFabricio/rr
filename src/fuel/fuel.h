@@ -7,11 +7,13 @@
 
 #ifndef DEBUG
 
+void fuel_load_texture();
 void fuel_spawn(Fuel_Container *container);
 void fuel_destroy(Fuel_Container *container, size_t index);
 void fuel_draw(const Fuel_Container* container);
 
 static Fuel_Functions fuel_functions = {
+	.load_texture = fuel_load_texture,
 	.spawn = fuel_spawn,
 	.draw = fuel_draw,
 	.destroy = fuel_destroy,
@@ -27,6 +29,7 @@ static Fuel_Functions fuel_functions = {
 #define RR_FUEL static
 
 static Fuel_Functions fuel_functions = {
+	.load_texture = NULL,
 	.spawn = NULL,
 	.draw = NULL,
 	.destroy = NULL,
@@ -39,6 +42,7 @@ RR_FUEL void reset_fuel_function()
 
 	fuel_shared_ptr = hr_reset_file(file_path, fuel_shared_ptr);
 
+	fuel_functions.load_texture = (fuel_load_texture_t)hr_reset_function(fuel_shared_ptr, "fuel_load_texture");
 	fuel_functions.spawn = (fuel_spawn_t)hr_reset_function(fuel_shared_ptr, "fuel_spawn");
 	fuel_functions.draw = (fuel_draw_t)hr_reset_function(fuel_shared_ptr, "fuel_draw");
 	fuel_functions.destroy = (fuel_destroy_t)hr_reset_function(fuel_shared_ptr, "fuel_destroy");
