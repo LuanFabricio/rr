@@ -24,6 +24,8 @@ void collision_check_player_fuel(Ship *player, Fuel_Container *container, const 
 		other_rec.y = container->fuel[i].pos.y;
 
 		if (CheckCollisionRecs(player_rec, other_rec)) {
+			player->fuel += container->fuel[i].content;
+			player->fuel = Clamp(player->fuel, 0, MAX_FUEL);
 			fuel_func->destroy(container, i);
 		}
 	}

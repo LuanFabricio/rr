@@ -7,7 +7,7 @@
 #include "../types.h"
 
 #define MIN_SPAWN_FUEL 15.f
-#define MAX_SPAWN_FUEL 3500.f
+#define MAX_SPAWN_FUEL 350.f
 #define FUEL_COLOR RAYWHITE
 
 Texture2D fuel_texture = {0};

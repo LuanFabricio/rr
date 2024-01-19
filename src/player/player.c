@@ -11,7 +11,6 @@
 #include "../constants.h"
 
 #define PLAYER_COLOR BLUE
-#define MAX_FUEL 5000
 #define PLAYER_FUEL_DECAY 0.25f
 #define FUEL_INDICATOR_MAGNITUDE 105.f
 

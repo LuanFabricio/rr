@@ -5,6 +5,7 @@
 
 #define GAME_WIDTH 1920
 #define GAME_HEIGHT 1080
+#define MAX_FUEL 5000
 
 #define ENEMIES_CAPACITY 255
 
