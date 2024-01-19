@@ -51,6 +51,7 @@ int main(void)
 
 	RenderTexture2D screen = LoadRenderTexture(GAME_WIDTH, GAME_HEIGHT);
 
+	fuel_functions.load_texture();
 	player_functions.start(&player);
 	Vector2 ball_velocity = CLITERAL(Vector2){ .x = 250.f, .y = 250.f };
 	Vector2 ball_pos = CLITERAL(Vector2){ .x = 42.f, .y = 42.f };
@@ -85,6 +86,8 @@ int main(void)
 #ifdef DEBUG
 		if (IsKeyPressed(KEY_R)) {
 			hr_reset_all();
+			player_functions.start(&player);
+			fuel_functions.load_texture();
 		}
 #endif // DEBUG
 
