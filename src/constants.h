@@ -8,6 +8,11 @@
 
 #define ENEMIES_CAPACITY 255
 
+static const Vector2 player_size = {
+	.x = 42.f,
+	.y = 42.f,
+};
+
 static const Vector2 max_enemy_size = {
 	.x = 42.f,
 	.y = 42.f,
