@@ -15,7 +15,7 @@ Texture2D fuel_texture = {0};
 void fuel_load_texture()
 {
 	Image tex = LoadImage("./assets/fuel/fuel.png");
-	ImageResizeNN(&tex, tex.width * 2, tex.height * 2);
+	ImageResizeNN(&tex, fuel_size.x, fuel_size.y);
 	fuel_texture = LoadTextureFromImage(tex);
 	UnloadImage(tex);
 }

@@ -133,7 +133,7 @@ void _player_move(Ship* player)
 Texture2D _player_load_texture()
 {
 	Image img = LoadImage("./assets/ship/ship.png");
-	ImageResizeNN(&img, 64, 64);
+	ImageResizeNN(&img, player_size.x, player_size.y);
 	Texture2D tex = LoadTextureFromImage(img);
 	UnloadImage(img);
 

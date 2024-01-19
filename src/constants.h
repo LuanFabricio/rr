@@ -9,8 +9,8 @@
 #define ENEMIES_CAPACITY 255
 
 static const Vector2 player_size = {
-	.x = 42.f,
-	.y = 42.f,
+	.x = 64.f,
+	.y = 64.f,
 };
 
 static const Vector2 max_enemy_size = {
@@ -24,8 +24,8 @@ static const Vector2 min_enemy_size = {
 };
 
 static const Vector2 fuel_size = {
-	.x = 28.f,
-	.y = 42.f,
+	.x = 28.f * 1.5f,
+	.y = 42.f * 1.5f,
 };
 
 #endif // __CONSTANTS_H

@@ -83,6 +83,10 @@ int main(void)
 			enemy_functions.spawn_random(&enemies);
 		}
 
+		if (IsKeyPressed(KEY_Y)) {
+			fuel_functions.spawn(&container);
+		}
+
 #ifdef DEBUG
 		if (IsKeyPressed(KEY_R)) {
 			hr_reset_all();
