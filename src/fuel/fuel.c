@@ -27,6 +27,8 @@ void fuel_spawn(Fuel_Container *container)
 	}
 
 	Vector2 pos = random_game_point();
+	pos.x = Clamp(pos.x, 0, GAME_WIDTH - fuel_size.x);
+	pos.y = Clamp(pos.y, 0, GAME_HEIGHT - fuel_size.y);
 	float fuel = random_float() * MAX_SPAWN_FUEL + MIN_SPAWN_FUEL;
 
 	container->fuel[container->size] = CLITERAL(Fuel) {
