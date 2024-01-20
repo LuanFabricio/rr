@@ -87,4 +87,42 @@ typedef struct {
 	collision_check_player_enemies_t check_player_enemies;
 } Collision_Functions;
 
+// ======================================= GAME =======================================
+
+
+typedef struct {
+	Player_Functions player_fn;
+	Fuel_Functions fuel_fn;
+	Enemy_Functions enemy_fn;
+	Collision_Functions collision_fn;
+} GameFunctions;
+
+typedef struct {
+	Ship player;
+	Fuel_Container container;
+	Enemies enemies;
+	RenderTexture2D screen_texture;
+} GameVars;
+
+// ======================================= GAME STATE =======================================
+
+typedef enum {
+	MENU = 0,
+	PLAY = 1,
+	DEAD = 2,
+} GameStateEnum;
+
+typedef struct {
+	GameStateEnum current_state;
+} GameState;
+
+CREATE_FUNCTION_TYPE(gamestate_update, (GameState *game_state), void);
+CREATE_FUNCTION_TYPE(gamestate_apply, (const GameState *game_state, const GameFunctions *game_fn, GameVars *game_vars), void);
+
+typedef struct {
+	gamestate_update_t update;
+	gamestate_apply_t apply;
+} GameState_Functions;
+
+
 #endif // __TYPES_H

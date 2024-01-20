@@ -6,6 +6,7 @@
 #include "src/collision/collision.h"
 #include "src/fuel/fuel.h"
 #include "src/enemy/enemy.h"
+#include "src/game_state/game_state.h"
 #include "src/types.h"
 
 #ifdef DEBUG
@@ -37,6 +38,7 @@ int main(void)
 		&reset_fuel_function,
 		&reset_collision_function,
 		&reset_enemy_function,
+		&reset_gamestate_function,
 	};
 	hr_init(CALC_SIZEOF(reset_functions), reset_functions);
 	hr_reset_all();
@@ -73,18 +75,36 @@ int main(void)
 	fuel_functions.destroy(&container, 0);
 	fuel_functions.destroy(&container, 100);
 
+	GameState gamestate = {0};
+
+	gamestate_functions.update(&gamestate);
+
+	GameFunctions game_fn = {
+		.player_fn = player_functions,
+		.enemy_fn = enemy_functions,
+		.fuel_fn = fuel_functions,
+		.collision_fn = collision_functions,
+	};
+
+	GameVars game_vars = {
+		.player = player,
+		.enemies = enemies,
+		.container = container,
+		.screen_texture = screen,
+	};
+
 	while (!WindowShouldClose()) {
 		player_functions.update(&player);
 
 		if (IsKeyPressed(KEY_T)) {
-			enemy_functions.spawn_random(&enemies);
-			enemy_functions.spawn_random(&enemies);
-			enemy_functions.spawn_random(&enemies);
-			enemy_functions.spawn_random(&enemies);
+			enemy_functions.spawn_random(&game_vars.enemies);
+			enemy_functions.spawn_random(&game_vars.enemies);
+			enemy_functions.spawn_random(&game_vars.enemies);
+			enemy_functions.spawn_random(&game_vars.enemies);
 		}
 
 		if (IsKeyPressed(KEY_Y)) {
-			fuel_functions.spawn(&container);
+			fuel_functions.spawn(&game_vars.container);
 		}
 
 #ifdef DEBUG
@@ -94,6 +114,10 @@ int main(void)
 			fuel_functions.load_texture();
 		}
 #endif // DEBUG
+
+		gamestate_functions.apply(&gamestate, &game_fn, &game_vars);
+
+		continue;
 
 		BeginTextureMode(screen);
 
