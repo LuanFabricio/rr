@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "raylib.h"
 
 #define UTILS_IMPLEMENTATION
@@ -12,16 +11,19 @@ void _draw_scene_on_texture(const GameFunctions *game_fn, const GameVars *game_v
 void _draw_scene_on_screen(const GameFunctions *game_fn, const GameVars *game_vars);
 
 // Extern functions
-void gamestate_update(GameState *game_state)
+void gamestate_update(GameState *game_state, GameVars *game_vars)
 {
-	game_state->current_state = PLAY;
+	if (!game_vars->player.alive || game_vars->player.fuel == 0) {
+		game_state->current_state = DEAD;
+	} else {
+		game_state->current_state = PLAY;
+	}
 }
 
 void gamestate_apply(const GameState *game_state, const GameFunctions *game_fn, GameVars *game_vars)
 {
 	switch (game_state->current_state) {
 		case PLAY: {
-			printf("Enemies: %zu\n", game_vars->enemies.size);
 			game_fn->player_fn.update(&game_vars->player);
 
 			_draw_scene_on_texture(game_fn, game_vars);
@@ -51,12 +53,28 @@ void gamestate_apply(const GameState *game_state, const GameFunctions *game_fn, 
 		}
 		break;
 
-		case DEAD:
+		case DEAD: {
+			_draw_scene_on_texture(game_fn, game_vars);
+
+			BeginTextureMode(game_vars->screen_texture);
+
+			Vector2 center = screen_center_point();
+			const char* text = "Fim de jogo!";
+			const int text_font = 32;
+			size_t text_padding = MeasureText(text, text_font) >> 1;
+			DrawText(text, center.x - text_padding, center.y, text_font, RAYWHITE);
+
+			EndTextureMode();
+
+			_draw_scene_on_screen(game_fn, game_vars);
+		}
+		break;
 		default:
 			break;
 	}
 }
 
+// Inner functions implementations
 void _draw_scene_on_texture(const GameFunctions *game_fn, const GameVars *game_vars)
 {
 	BeginTextureMode(game_vars->screen_texture);
@@ -66,6 +84,8 @@ void _draw_scene_on_texture(const GameFunctions *game_fn, const GameVars *game_v
 	game_fn->fuel_fn.draw(&game_vars->container);
 	game_fn->player_fn.draw_game(game_vars->player);
 	game_fn->enemy_fn.draw_arr(&game_vars->enemies);
+
+	game_fn->player_fn.draw_ui(game_vars->player);
 
 	EndTextureMode();
 }

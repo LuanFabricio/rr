@@ -77,8 +77,6 @@ int main(void)
 
 	GameState gamestate = {0};
 
-	gamestate_functions.update(&gamestate);
-
 	GameFunctions game_fn = {
 		.player_fn = player_functions,
 		.enemy_fn = enemy_functions,
@@ -95,6 +93,7 @@ int main(void)
 
 	while (!WindowShouldClose()) {
 		player_functions.update(&player);
+		gamestate_functions.update(&gamestate, &game_vars);
 
 		if (IsKeyPressed(KEY_T)) {
 			enemy_functions.spawn_random(&game_vars.enemies);
