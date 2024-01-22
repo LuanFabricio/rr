@@ -8,26 +8,32 @@
 
 // Inner functions declaration
 void _draw_scene_on_texture(const GameFunctions *game_fn, const GameVars *game_vars);
-void _draw_scene_on_screen(const GameFunctions *game_fn, const GameVars *game_vars);
+void _draw_scene_on_screen(const GameVars *game_vars);
 
 // Extern functions
 void gamestate_update(GameState *game_state, GameVars *game_vars)
 {
 	if (!game_vars->player.alive || game_vars->player.fuel == 0) {
 		game_state->current_state = DEAD;
-	} else {
+	} else if (game_state->current_state == MENU)
+		game_state->current_state = MENU;
+	else {
 		game_state->current_state = PLAY;
 	}
 }
 
-void gamestate_apply(const GameState *game_state, const GameFunctions *game_fn, GameVars *game_vars)
+void gamestate_apply(GameState *game_state, const GameFunctions *game_fn, GameVars *game_vars)
 {
 	switch (game_state->current_state) {
 		case PLAY: {
+			if(IsKeyReleased(KEY_ESCAPE)) {
+				game_state->current_state = MENU;
+			}
+
 			game_fn->player_fn.update(&game_vars->player);
 
 			_draw_scene_on_texture(game_fn, game_vars);
-			_draw_scene_on_screen(game_fn, game_vars);
+			_draw_scene_on_screen(game_vars);
 
 			game_fn->collision_fn.check_player_fuel(&game_vars->player, &game_vars->container, &game_fn->fuel_fn);
 			game_fn->collision_fn.check_player_enemies(&game_vars->player, &game_vars->enemies, &game_fn->enemy_fn);
@@ -39,17 +45,44 @@ void gamestate_apply(const GameState *game_state, const GameFunctions *game_fn, 
 		case MENU: {
 			_draw_scene_on_texture(game_fn, game_vars);
 
+			Rectangle resume_btn_rect = {
+				.width = 300,
+				.height = 80,
+			};
+			Vector2 center = screen_center_point();
+			const size_t text_font = 32;
+			resume_btn_rect.x = center.x - resume_btn_rect.width / 2.0;
+			resume_btn_rect.y = center.y - resume_btn_rect.height / 2.0;
+
+			const char* resume_txt = "Resume";
+			size_t text_padding_x = MeasureText(resume_txt, text_font) >> 1;
+			size_t text_padding_y = text_font / 2.0;
+
 			BeginTextureMode(game_vars->screen_texture);
 
-			Vector2 center = screen_center_point();
-			const char* text = "Teste";
-			const int text_font = 32;
-			size_t text_padding = MeasureText(text, text_font) >> 1;
-			DrawText(text, center.x - text_padding, center.y, text_font, RAYWHITE);
+			DrawRectangleRec(resume_btn_rect, RAYWHITE);
+			DrawText(resume_txt, center.x - text_padding_x, center.y - text_padding_y, 32, BLACK);
 
 			EndTextureMode();
 
-			_draw_scene_on_screen(game_fn, game_vars);
+			// TODO: Move to utils
+			// Getting mouse in the screen position
+			Vector2 mouse = GetMousePosition();
+
+			// Normalizing the mouse to current screen
+			mouse.x /= (float)GetScreenWidth();
+			mouse.y /= (float)GetScreenHeight();
+
+			// Transforming to game screen
+			mouse.x *= (float)GAME_WIDTH;
+			mouse.y *= (float)GAME_HEIGHT;
+
+			const bool hit_resume = IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(mouse, resume_btn_rect);
+			if (hit_resume || IsKeyReleased(KEY_ESCAPE)) {
+				game_state->current_state = PLAY;
+			}
+
+			_draw_scene_on_screen(game_vars);
 		}
 		break;
 
@@ -64,16 +97,16 @@ void gamestate_apply(const GameState *game_state, const GameFunctions *game_fn, 
 			size_t endgame_text_padding = MeasureText(endgame_text, endgame_text_font) >> 1;
 			DrawText(endgame_text, center.x - endgame_text_padding, center.y, endgame_text_font, RAYWHITE);
 
-			const char* resetgame_text = "Pressione qualquer tecla para reiniciar o jogo!";
+			const char* resetgame_text = "Pressione a tecla Enter para reiniciar o jogo!";
 			const int resetgame_text_font = 32;
 			size_t resetgame_text_padding = MeasureText(resetgame_text, resetgame_text_font) >> 1;
 			DrawText(resetgame_text, center.x - resetgame_text_padding, center.y + 32, resetgame_text_font, RAYWHITE);
 
 			EndTextureMode();
 
-			_draw_scene_on_screen(game_fn, game_vars);
+			_draw_scene_on_screen(game_vars);
 
-			if (GetKeyPressed() != 0) {
+			if (IsKeyPressed(KEY_ENTER)) {
 				game_fn->player_fn.start(&game_vars->player);
 				game_vars->enemies.size = 0;
 				game_vars->container.size = 0;
@@ -104,7 +137,7 @@ void _draw_scene_on_texture(const GameFunctions *game_fn, const GameVars *game_v
 	EndTextureMode();
 }
 
-void _draw_scene_on_screen(const GameFunctions *game_fn, const GameVars *game_vars)
+void _draw_scene_on_screen(const GameVars *game_vars)
 {
 	float screen_width = game_vars->screen_texture.texture.width;
 	float screen_height = -game_vars->screen_texture.texture.height;
