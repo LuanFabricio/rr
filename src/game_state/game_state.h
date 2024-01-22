@@ -26,7 +26,7 @@ static void reset_gamestate_function()
 #else
 
 void gamestate_update(GameState *game_state, GameVars *game_vars);
-void gamestate_apply(const GameState *game_state, const GameFunctions *game_fn, GameVars *game_vars);
+void gamestate_apply(GameState *game_state, const GameFunctions *game_fn, GameVars *game_vars);
 
 static GameState_Functions gamestate_functions = {
 	.update = gamestate_update,

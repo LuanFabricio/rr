@@ -117,7 +117,7 @@ typedef struct {
 } GameState;
 
 CREATE_FUNCTION_TYPE(gamestate_update, (GameState *game_state, GameVars *game_vars), void);
-CREATE_FUNCTION_TYPE(gamestate_apply, (const GameState *game_state, const GameFunctions *game_fn, GameVars *game_vars), void);
+CREATE_FUNCTION_TYPE(gamestate_apply, (GameState *game_state, const GameFunctions *game_fn, GameVars *game_vars), void);
 
 typedef struct {
 	gamestate_update_t update;
