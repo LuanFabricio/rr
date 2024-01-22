@@ -3,10 +3,6 @@
 #include <time.h>
 #include "raylib.h"
 #include "raymath.h"
-#include "src/collision/collision.h"
-#include "src/fuel/fuel.h"
-#include "src/enemy/enemy.h"
-#include "src/game_state/game_state.h"
 #include "src/types.h"
 
 #ifdef DEBUG
@@ -16,6 +12,10 @@
 #define PLAYER_IMPLEMENTATION
 #endif // DEBUG
 #include "src/player/player.h"
+#include "src/game_state/game_state.h"
+#include "src/collision/collision.h"
+#include "src/fuel/fuel.h"
+#include "src/enemy/enemy.h"
 
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720

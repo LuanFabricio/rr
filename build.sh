@@ -16,7 +16,10 @@ if [[ $1 == "release" ]]; then
 	$CC $CFLAGS -c -o build/objs/enemy.o src/enemy/enemy.c $CLINKS
 	$CC $CFLAGS -c -o build/objs/game_state.o src/game_state/game_state.c $CLINKS
 
-	OBJS="build/objs/player.o build/objs/fuel.o build/objs/collision.o build/objs/enemy.o build/objs/collision.o"
+	OBJS="build/objs/player.o build/objs/fuel.o"
+	OBJS=$OBJS" build/objs/enemy.o"
+	OBJS=$OBJS" build/objs/collision.o build/objs/game_state.o"
+
 	$CC $CFLAGS -o build/main main.c $OBJS $CLINKS
 else
 	$CC $CFLAGS -g -fPIC -shared -o build/objs/player.so src/player/player.c $CLINKS -D DEBUG &

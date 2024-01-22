@@ -12,6 +12,7 @@
 
 static Collision_Functions collision_functions = {
 	.check_player_fuel = NULL,
+	.check_player_enemies = NULL,
 };
 
 void *collision_shared_ptr = NULL;
@@ -32,7 +33,6 @@ static Collision_Functions collision_functions = {
 	.check_player_fuel = collision_check_player_fuel,
 	.check_player_enemies = collision_check_player_enemies,
 };
-
 #endif // DEBUG
 
 #endif // __COLLISION_H
