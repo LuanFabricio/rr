@@ -76,6 +76,7 @@ int main(void)
 	fuel_functions.destroy(&container, 100);
 
 	GameState gamestate = {0};
+	gamestate.current_state = MENU;
 
 	GameFunctions game_fn = {
 		.player_fn = player_functions,
@@ -90,6 +91,8 @@ int main(void)
 		.container = container,
 		.screen_texture = screen,
 	};
+
+	SetExitKey(KEY_NULL);
 
 	while (!WindowShouldClose()) {
 		// player_functions.update(&player);
