@@ -30,6 +30,7 @@ void gamestate_apply(GameState *game_state, const GameFunctions *game_fn, GameVa
 				game_state->current_state = MENU;
 			}
 
+			game_fn->fuel_fn.container_update(&game_vars->container);
 			game_fn->player_fn.update(&game_vars->player);
 
 			_draw_scene_on_texture(game_fn, game_vars);

@@ -58,3 +58,15 @@ void fuel_destroy(Fuel_Container *container, size_t index)
 		container->fuel[index] = container->fuel[container->size];
 	}
 }
+
+void fuel_container_update(Fuel_Container *container)
+{
+	const float FUEL_SPEED = GAME_SPEED * 0.95f;
+	for (size_t i = 0; i < container->size; i++) {
+		container->fuel[i].pos.y += FUEL_SPEED * GetFrameTime();
+
+		if (container->fuel[i].pos.y >= GAME_HEIGHT) {
+			fuel_destroy(container, i--);
+		}
+	}
+}
