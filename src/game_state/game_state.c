@@ -2,6 +2,7 @@
 
 #define UTILS_IMPLEMENTATION
 #define SCREEN_UTILS
+#define MOUSE_UTILS
 #include "../utils.h"
 
 #include "../types.h"
@@ -66,18 +67,7 @@ void gamestate_apply(GameState *game_state, const GameFunctions *game_fn, GameVa
 
 			EndTextureMode();
 
-			// TODO: Move to utils
-			// Getting mouse in the screen position
-			Vector2 mouse = GetMousePosition();
-
-			// Normalizing the mouse to current screen
-			mouse.x /= (float)GetScreenWidth();
-			mouse.y /= (float)GetScreenHeight();
-
-			// Transforming to game screen
-			mouse.x *= (float)GAME_WIDTH;
-			mouse.y *= (float)GAME_HEIGHT;
-
+			Vector2 mouse = get_game_mouse();
 			const bool hit_resume = IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(mouse, resume_btn_rect);
 			if (hit_resume || IsKeyReleased(KEY_ESCAPE)) {
 				game_state->current_state = PLAY;

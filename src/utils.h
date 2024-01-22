@@ -43,6 +43,23 @@ RR_UTILS float random_float()
 }
 #endif // RANDOM_UTILS
 
+#ifdef MOUSE_UTILS
+RR_UTILS Vector2 get_game_mouse()
+{
+	Vector2 mouse = GetMousePosition();
+
+	// Normalizing the mouse to current screen
+	mouse.x /= (float)GetScreenWidth();
+	mouse.y /= (float)GetScreenHeight();
+
+	// Transforming to game screen
+	mouse.x *= (float)GAME_WIDTH;
+	mouse.y *= (float)GAME_HEIGHT;
+
+	return mouse;
+}
+#endif // MOUSE_UTILS
+
 #endif // UTILS_IMPLEMENTATION
 #endif // __UTILS_IMPLEMENTATION
 
