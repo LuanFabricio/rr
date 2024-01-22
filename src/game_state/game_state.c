@@ -59,14 +59,28 @@ void gamestate_apply(const GameState *game_state, const GameFunctions *game_fn, 
 			BeginTextureMode(game_vars->screen_texture);
 
 			Vector2 center = screen_center_point();
-			const char* text = "Fim de jogo!";
-			const int text_font = 32;
-			size_t text_padding = MeasureText(text, text_font) >> 1;
-			DrawText(text, center.x - text_padding, center.y, text_font, RAYWHITE);
+			const char* endgame_text = "Fim de jogo!";
+			const int endgame_text_font = 32;
+			size_t endgame_text_padding = MeasureText(endgame_text, endgame_text_font) >> 1;
+			DrawText(endgame_text, center.x - endgame_text_padding, center.y, endgame_text_font, RAYWHITE);
+
+			const char* resetgame_text = "Pressione qualquer tecla para reiniciar o jogo!";
+			const int resetgame_text_font = 32;
+			size_t resetgame_text_padding = MeasureText(resetgame_text, resetgame_text_font) >> 1;
+			DrawText(resetgame_text, center.x - resetgame_text_padding, center.y + 32, resetgame_text_font, RAYWHITE);
 
 			EndTextureMode();
 
 			_draw_scene_on_screen(game_fn, game_vars);
+
+			if (GetKeyPressed() != 0) {
+				game_fn->player_fn.start(&game_vars->player);
+				game_vars->enemies.size = 0;
+				game_vars->container.size = 0;
+
+				game_fn->fuel_fn.spawn(&game_vars->container);
+				game_fn->fuel_fn.spawn(&game_vars->container);
+			}
 		}
 		break;
 		default:

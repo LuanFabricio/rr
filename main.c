@@ -92,7 +92,7 @@ int main(void)
 	};
 
 	while (!WindowShouldClose()) {
-		player_functions.update(&player);
+		// player_functions.update(&player);
 		gamestate_functions.update(&gamestate, &game_vars);
 
 		if (IsKeyPressed(KEY_T)) {
