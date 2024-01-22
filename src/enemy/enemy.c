@@ -49,7 +49,7 @@ void enemy_destroy(Enemies* enemies, size_t enemy_index)
 void enemy_update(Enemies *enemies)
 {
 	for (size_t i =  0; i < enemies->size; i++) {
-		enemies->data[i].pos.y += 275.f * GetFrameTime();
+		enemies->data[i].pos.y += GAME_SPEED * GetFrameTime();
 
 		if (enemies->data[i].pos.y >= GAME_HEIGHT) {
 			enemy_destroy(enemies, i);

@@ -9,6 +9,8 @@
 
 #define ENEMIES_CAPACITY 255
 
+static const float GAME_SPEED = 275.0f;
+
 static const Vector2 player_size = {
 	.x = 64.f,
 	.y = 64.f,
