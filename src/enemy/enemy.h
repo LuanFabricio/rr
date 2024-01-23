@@ -31,6 +31,7 @@ void reset_enemy_function()
 	enemy_functions.spawn_random = (enemy_spawn_random_t)hr_reset_function(enemy_shared_ptr, "enemy_spawn_random");
 	enemy_functions.destroy = (enemy_destroy_t)hr_reset_function(enemy_shared_ptr, "enemy_destroy");
 	enemy_functions.update = (enemy_update_t)hr_reset_function(enemy_shared_ptr, "enemy_update");
+	enemy_functions.load_texture = (enemy_load_texture_t)hr_reset_function(enemy_shared_ptr, "enemy_load_texture");
 }
 
 #else
@@ -41,6 +42,7 @@ void enemy_spawn_random(Enemies* enemies);
 void enemy_spawn(Enemies* enemies, Ship new_enemy);
 void enemy_destroy(Enemies* enemies, size_t enemy_index);
 void enemy_update(Enemies *enemies);
+void enemy_load_texture();
 
 static Enemy_Functions enemy_functions = {
 	.draw = enemy_draw,
@@ -49,6 +51,7 @@ static Enemy_Functions enemy_functions = {
 	.spawn_random = enemy_spawn_random,
 	.destroy = enemy_destroy,
 	.update = enemy_update,
+	.load_texture = enemy_load_texture,
 };
 
 #endif // DEBUG

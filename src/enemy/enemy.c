@@ -13,6 +13,20 @@
 
 #define MIN_Y_SPAWN -420.f
 
+
+static Rectangle origin = {0};
+static Texture2D enemy_tex = {0};
+
+void enemy_load_texture()
+{
+	Image enemy_img = LoadImage("assets/rock/rock.png");
+	enemy_tex = LoadTextureFromImage(enemy_img);
+	UnloadImage(enemy_img);
+
+	origin.width = enemy_tex.width;
+	origin.height = enemy_tex.height;
+}
+
 void enemy_spawn(Enemies *enemies, Ship new_enemy)
 {
 	assert(enemies->size < ENEMIES_CAPACITY);
@@ -60,7 +74,15 @@ void enemy_update(Enemies *enemies)
 
 void enemy_draw(const Ship * enemy)
 {
-	DrawRectangleV(enemy->pos, enemy->size, ENEMY_COLOR);
+	assert(enemy_tex.width != 0 && enemy_tex.height != 0);
+
+	const Rectangle destiny = {
+		.x = enemy->pos.x, .y = enemy->pos.y,
+		.width = enemy->size.x,
+		.height = enemy->size.y,
+	};
+
+	DrawTexturePro(enemy_tex, origin, destiny, Vector2Zero(), 0, RAYWHITE);
 }
 
 void enemy_draw_arr(const Enemies *enemies)

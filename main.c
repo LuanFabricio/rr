@@ -92,6 +92,8 @@ int main(void)
 		.screen_texture = screen,
 	};
 
+	game_fn.enemy_fn.load_texture();
+
 	SetExitKey(KEY_NULL);
 
 	while (!WindowShouldClose()) {
@@ -112,6 +114,7 @@ int main(void)
 #ifdef DEBUG
 		if (IsKeyPressed(KEY_R)) {
 			hr_reset_all();
+			game_fn.enemy_fn.load_texture();
 			player_functions.start(&player);
 			fuel_functions.load_texture();
 		}
